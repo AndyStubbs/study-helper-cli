@@ -15,6 +15,8 @@ class Question():
 				raise ValueError( f"Missing required {key} in question." )
 		if not isinstance( data[ "text" ], str ):
 			raise ValueError( f"Invalid format for text in question." )
+		if data[ "text" ] == "":
+			raise ValueError( f"Question text must not be blank." )
 		self.text = data[ "text" ]
 		
 		# Validate Answers
@@ -58,17 +60,27 @@ class Quiz():
 			
 			# Check if the data is a dictionary
 			if not isinstance( data, dict ):
-				raise ValueError( f"Invalid JSON format for file '{filename}'." )
+				raise ValueError(
+					f"Invalid JSON format for file '{filename}'."
+				)
 
 			# Check for required keys
 			all_keys = [ "name", "description", "questions" ]
 			for key in all_keys:
 				if key not in data:
-					raise ValueError( f"Missing required {key} in JSON file '{filename}'." )
+					raise ValueError(
+						f"Missing required {key} in JSON file '{filename}'."
+					)
 
 			# Load name
 			if not isinstance( data[ "name" ], str ):
-				raise ValueError( f"Invalid format for name in JSON file '{filename}'." )
+				raise ValueError(
+					f"Invalid format for name in JSON file '{filename}'."
+				)
+			if data[ "name" ] == "":
+				raise ValueError(
+					f"Field name cannot be blank in JSON file '{filename}'."
+				)
 			self.name = data[ "name" ]
 			
 			# Load description

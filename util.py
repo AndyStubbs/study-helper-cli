@@ -1,8 +1,4 @@
-import shutil
-
 def get_option( prompt, options ):
-	terminal_size = shutil.get_terminal_size()
-
 	for i in range( 0, len( options ) ):
 		print( f"{i+1}. {options[i][0]}" )
 	

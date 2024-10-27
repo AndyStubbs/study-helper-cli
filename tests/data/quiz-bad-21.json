@@ -1,0 +1,9 @@
+{
+	"name": "test",
+	"description": "",
+	"questions": [ {
+		"text": "",
+		"answers": [ "1" ],
+		"correct_answer": 0
+	} ]
+}
