@@ -25,6 +25,11 @@ def display_menu():
 
 def run_quiz():
 	print( "Running Quiz" )
+	ansi.print_style( "\n== Run Quiz ==\n", ansi.Fore.GREEN )
+	temp = []
+	for i in range( 0, 10 ):
+		temp.append( f"Test {i} - dajsdfak jsdhfasjdfhasdjfhasdjfhasdf" )
+	util.get_option( "Select quiz", temp )
 
 def create_quiz():
 	ansi.print_style( "\n== Creating Quiz ==\n", ansi.Fore.GREEN )

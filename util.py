@@ -1,9 +1,9 @@
+import os
+import math
 import ansi
 
 def get_option( prompt, options ):
-	for i in range( 0, len( options ) ):
-		print( f"{i+1}. {options[i]}" )
-	
+	print_columns( options )
 	is_valid = False
 	while not is_valid:
 		msg = (
@@ -31,3 +31,90 @@ def get_text( prompt, err_msg = "" ):
 			is_valid = True
 	return value
 
+def print_columns2( options ):
+	if len( options ) <= 10:
+		for i in range( 0, len( options ) ):
+			print( f"{i+1}. {options[i]}" )
+	else:
+		cols = math.ceil( len( options ) / 10 )
+		rows = math.ceil( len(options) / cols )
+		max_col_width = os.get_terminal_size().columns // cols - 6
+		
+		# Get column widths
+		index = 0
+		columns = []
+		column_widths = []
+		for col in range( 0, cols ):
+			columns.append( [] )
+			column_widths.append( 0 )
+			for row in range( 0, rows ):
+				if index >= len( options ):
+					break
+				option_text = options[ index ]
+				if len( option_text ) > max_col_width:
+					option_text = option_text[ : max_col_width - 3 ] + "..."
+				if len( option_text ) + 6 > column_widths[ col ]:
+					column_widths[ col ] = len( option_text ) + 6
+				columns[ col ].append( option_text )
+				index += 1
+		
+		# Print Columns
+		index = 0
+		for col in range( 0, len( columns ) ):
+			row_str = ""
+			print( f"Rows: {len(columns[col])}" )
+			for row in range( 0, len( columns[ col ] ) ):
+				text = columns[ col ][ row ]
+				option_text = f"{index+1}. {text}"
+				padding = column_widths[ col ] - len( option_text )
+				row_str += option_text + " " * padding
+				index += 1
+			print( row_str )
+
+
+def print_columns( options ):
+	if len( options ) <= 10:
+		for i in range( 0, len( options ) ):
+			print( f"{i+1}. {options[i]}" )
+	else:
+		# Calculate the number of columns and rows
+		cols = math.ceil( len( options ) / 10 )
+		rows = math.ceil( len( options ) / cols )
+		terminal_width = os.get_terminal_size().columns
+		
+		# Adjust rows if max_col_width is too small
+		while True:
+			max_col_width = terminal_width // cols - 6
+			if max_col_width > 10 or cols == 1:
+				break
+			rows += 1
+			cols = math.ceil( len( options ) / rows )
+		
+		# Get column widths
+		index = 0
+		columns = [ [] for _ in range( rows ) ]
+		column_widths = [ 0 ] * cols
+		
+		for col in range( 0, cols ):
+			for row in range( 0, rows ):
+				if index >= len( options ):
+					break
+				option_text = options[ index ]
+				# Truncate the option text if it exceeds the max width
+				if len( option_text ) > max_col_width:
+					option_text = option_text[ : max_col_width - 3 ] + "..."
+				if len( option_text ) + 6 > column_widths[ col ]:
+					column_widths[ col ] = len( option_text ) + 6
+				columns[ row ].append( ( index + 1, option_text ) )
+				index += 1
+		
+		# Print each row across columns
+		for row in range( rows ):
+			row_str = ""
+			for col in range( cols ):
+				if row < len( columns ) and col < len( columns[ row ] ):
+					index, text = columns[ row ][ col ]
+					option_text = f"{index}. {text}"
+					padding = column_widths[ col ] - len( option_text )
+					row_str += option_text + " " * padding
+			print( row_str )
