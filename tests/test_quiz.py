@@ -7,17 +7,17 @@ class TestQuiz( unittest.TestCase ):
 	def test_load_file_not_found( self ):
 		quiz = Quiz()
 		with self.assertRaises( FileNotFoundError ) as context:
-			quiz.load( "no-file.json" )
+			quiz.load_from_file( "no-file.json" )
 	
 	def test_load_invalid_format( self ):
 		current_dir = os.path.dirname( __file__ )
 		filename = os.path.join( current_dir, "data/quiz-bad-01.json" )
 		quiz = Quiz()
 		with self.assertRaises( ValueError ) as context:
-			quiz.load( filename )
+			quiz.load_from_file( filename )
 		self.assertEqual(
 			str( context.exception ),
-			f"Invalid JSON format for file '{filename}'."
+			f"Invalid JSON format."
 		)
 	
 	def test_load_missing_key( self ):
@@ -31,10 +31,10 @@ class TestQuiz( unittest.TestCase ):
 			filename = os.path.join( current_dir, name )
 			quiz = Quiz()
 			with self.assertRaises( ValueError ) as context:
-				quiz.load( filename )
+				quiz.load_from_file( filename )
 			self.assertEqual(
 				str( context.exception ),
-				f"Missing required {key} in JSON file '{filename}'."
+				f"Missing required {key}."
 			)
 	
 	def test_load_text_blank( self ):
@@ -42,10 +42,10 @@ class TestQuiz( unittest.TestCase ):
 		filename = os.path.join( current_dir, "data/quiz-bad-20.json" )
 		quiz = Quiz()
 		with self.assertRaises( ValueError ) as context:
-			quiz.load( filename )
+			quiz.load_from_file( filename )
 		self.assertEqual(
 			str( context.exception ),
-			f"Field name cannot be blank in JSON file '{filename}'."
+			f"Field name cannot be blank."
 		)
 
 	def test_load_invalid_key_format( self ):
@@ -59,10 +59,10 @@ class TestQuiz( unittest.TestCase ):
 			filename = os.path.join( current_dir, name )
 			quiz = Quiz()
 			with self.assertRaises( ValueError ) as context:
-				quiz.load( filename )
+				quiz.load_from_file( filename )
 			self.assertEqual(
 				str( context.exception ),
-				f"Invalid format for {key} in JSON file '{filename}'."
+				f"Invalid format for {key}."
 			)
 	
 	def test_load_missing_key_in_question( self ):
@@ -76,7 +76,7 @@ class TestQuiz( unittest.TestCase ):
 			filename = os.path.join( current_dir, name )
 			quiz = Quiz()
 			with self.assertRaises( ValueError ) as context:
-				quiz.load( filename )
+				quiz.load_from_file( filename )
 			self.assertEqual(
 				str( context.exception ),
 				f"Missing required {key} in question."
@@ -99,7 +99,7 @@ class TestQuiz( unittest.TestCase ):
 			filename = os.path.join( current_dir, name )
 			quiz = Quiz()
 			with self.assertRaises( ValueError ) as context:
-				quiz.load( filename )
+				quiz.load_from_file( filename )
 			self.assertEqual(
 				str( context.exception ),
 				f"Invalid format for {key} in question{end}"
@@ -110,7 +110,7 @@ class TestQuiz( unittest.TestCase ):
 		filename = os.path.join( current_dir, "data/quiz-bad-21.json" )
 		quiz = Quiz()
 		with self.assertRaises( ValueError ) as context:
-			quiz.load( filename )
+			quiz.load_from_file( filename )
 		self.assertEqual(
 			str( context.exception ),
 			f"Question text must not be blank."
@@ -120,7 +120,7 @@ class TestQuiz( unittest.TestCase ):
 		current_dir = os.path.dirname( __file__ )
 		filename = os.path.join( current_dir, "data/quiz-good-01.json" )
 		quiz = Quiz()
-		quiz.load( filename )
+		quiz.load_from_file( filename )
 		
 		# Checks
 		self.assertEqual( "test", quiz.name )
