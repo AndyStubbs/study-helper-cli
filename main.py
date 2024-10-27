@@ -59,6 +59,7 @@ def create_quiz():
 				quiz.questions.append( question )
 		print()
 	print( f"Quiz: {quiz.name} created with {len(quiz.questions)} questions." )
+	quiz.save()
 
 
 def edit_quiz():

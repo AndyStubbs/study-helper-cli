@@ -1,0 +1,26 @@
+{
+	"name": "Math",
+	"description": "Simple Addition",
+	"questions": [
+		{
+			"text": "What is 1+1?",
+			"answers": [
+				"1",
+				"2",
+				"3",
+				"4"
+			],
+			"correct_answer": 1
+		},
+		{
+			"text": "What is 2+2?",
+			"answers": [
+				"2",
+				"3",
+				"4",
+				"5"
+			],
+			"correct_answer": 2
+		}
+	]
+}

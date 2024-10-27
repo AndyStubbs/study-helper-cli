@@ -1,4 +1,5 @@
 import json
+import os
 
 
 class Question():
@@ -90,4 +91,48 @@ class Quiz():
 			question = Question()
 			question.load( q )
 			self.questions.append( question )
+	
+	def save( self, is_test = False ):
+		# Serialize the quiz data
+		data = {
+			"name": self.name,
+			"description": self.description,
+			"questions": []
+		}
+		for question in self.questions:
+			q_data = {
+				"text": question.text,
+				"answers": [],
+				"correct_answer": question.correct_answer
+			}
+			for answer in question.answers:
+				q_data[ "answers" ].append( answer )
+			data[ "questions" ].append( q_data )
+		
+		# Create the quiz path
+		current_dir = os.path.dirname( __file__ )
+		if is_test:
+			quiz_folder = os.path.join( "tests/quizzes" )
+		else:
+			quiz_folder = os.path.join( "quizzes" )
+		
+		if not os.path.exists( quiz_folder ):
+			os.makedirs( quiz_folder )
+		
+		# Count how many quizzes are already saved
+		prefix = "quiz-"
+		postfix = ".json"
+		cnt = 1
+		for filename in os.listdir( quiz_folder ):
+			if filename.startswith( prefix ) and filename.endswith( postfix ):
+				cnt += 1
+		
+		# Create the filename
+		cnt = str( cnt )
+		name = prefix + "0" * ( 5 - len( cnt ) - 1 ) + cnt + postfix
+		filename = os.path.join( quiz_folder, name )
+		
+		# Write the json file
+		with open( filename, "w" ) as file:
+			file.write( json.dumps( data, indent = "\t" ) )
 

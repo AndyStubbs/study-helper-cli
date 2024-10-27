@@ -1,6 +1,6 @@
 import unittest
 import os
-from quiz import Quiz
+from quiz import Quiz, Question
 
 
 class TestQuiz( unittest.TestCase ):
@@ -131,4 +131,57 @@ class TestQuiz( unittest.TestCase ):
 		self.assertEqual( "2", quiz.questions[ 2 ].answers[ 1 ] )
 		self.assertEqual( 3, quiz.questions[ 3 ].correct_answer )
 		self.assertEqual( "4", quiz.questions[ 3 ].answers[ 3 ] )
+	
+	def test_save_quiz( self ):
+		
+		# Get pathnames
+		current_dir = os.path.dirname( __file__ )
+		quiz_dir = os.path.join( current_dir, "quizzes" )
+		
+		# Remove any existing test quizzes
+		files = os.listdir( quiz_dir )
+		for file in files:
+			file_path = os.path.join( quiz_dir, file )
+			if os.path.isfile( file_path ):
+				os.remove( file_path )
+		
+		# Create a blank quiz
+		quiz1 = Quiz()
+		quiz1.name = "Blank Quiz"
+		quiz1.save( True )
+		
+		# Create a quiz with some questions
+		quiz2 = Quiz()
+		quiz2.name = "Quiz With Data"
+		question1 = Question()
+		question1.text = "What is 1+1?"
+		question1.answers = [ "1", "2", "3", "4" ]
+		question1.correct_answer = 1
+		quiz2.questions.append( question1 )
+		question2 = Question()
+		question2.text = "What is 2+2?"
+		question2.answers = [ "2", "3", "4", "5" ]
+		question2.correct_answer = 2
+		quiz2.questions.append( question2 )
+		quiz2.save( True )
+		
+		# Check quiz1
+		quiz1_path = os.path.join( quiz_dir, "quiz-0001.json" )
+		self.assertTrue( os.path.exists( quiz1_path ) )
+		quizCheck1 = Quiz()
+		quizCheck1.load_from_file( quiz1_path )
+		self.assertEqual( quiz1.name, quizCheck1.name )
+		self.assertEqual( quiz1.description, quizCheck1.description )
+		self.assertEqual( len( quiz1.questions ), len( quizCheck1.questions ) )
+		
+		# Check quiz2
+		quiz2_path = os.path.join( quiz_dir, "quiz-0002.json" )
+		self.assertTrue( os.path.exists( quiz2_path ) )
+		quizCheck2 = Quiz()
+		quizCheck2.load_from_file( quiz2_path )
+		self.assertEqual( quiz2.name, quizCheck2.name )
+		self.assertEqual( quiz2.description, quizCheck2.description )
+		self.assertEqual( len( quiz2.questions ), len( quizCheck2.questions ) )
+		self.assertEqual( 1, quizCheck2.questions[ 0 ].correct_answer )
+		self.assertEqual( "What is 2+2?", quizCheck2.questions[ 1 ].text )
 
