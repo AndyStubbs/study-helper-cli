@@ -1,0 +1,30 @@
+{
+	"name": "Skill Issues",
+	"description": "What are your skill issues!",
+	"questions": [
+		{
+			"text": "Do you know how to tie your shoes?",
+			"answers": [
+				"Yes",
+				"No"
+			],
+			"correct_answer": 1,
+			"concepts": [
+				"Basic Skills"
+			]
+		},
+		{
+			"text": "Do you know how to code?",
+			"answers": [
+				"Yes",
+				"No",
+				"Only HTML",
+				"Only Rust"
+			],
+			"correct_answer": 3,
+			"concepts": [
+				"Coding Skills"
+			]
+		}
+	]
+}

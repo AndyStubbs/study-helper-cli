@@ -7,6 +7,7 @@ class Question():
 		self.text = ""
 		self.answers = []
 		self.correct_answer = -1
+		self.concepts = []
 	
 	def load( self, data ):
 		# Check for required question keys
@@ -47,6 +48,17 @@ class Question():
 				f"Invalid format for correct_answer in question '{self.text}'."
 			)
 		self.correct_answer = data[ "correct_answer" ]
+
+		# Validate Concepts
+		self.concepts = []
+		if "concepts" in data:
+			if not isinstance( data[ "concepts" ], list ):
+				raise ValueError(
+					f"Invalid format for concepts in question '{self.text}'"
+				)
+			for concept in data[ "concepts" ]:
+				if isinstance( concept, str ):
+					self.concepts.append( concept )
 
 
 class Quiz():
@@ -103,14 +115,14 @@ class Quiz():
 			q_data = {
 				"text": question.text,
 				"answers": [],
-				"correct_answer": question.correct_answer
+				"correct_answer": question.correct_answer,
+				"concepts": question.concepts
 			}
 			for answer in question.answers:
 				q_data[ "answers" ].append( answer )
 			data[ "questions" ].append( q_data )
 		
 		# Create the quiz path
-		current_dir = os.path.dirname( __file__ )
 		if is_test:
 			quiz_folder = os.path.join( "tests/quizzes" )
 		else:
@@ -135,4 +147,3 @@ class Quiz():
 		# Write the json file
 		with open( filename, "w" ) as file:
 			file.write( json.dumps( data, indent = "\t" ) )
-

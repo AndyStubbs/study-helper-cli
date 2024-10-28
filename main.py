@@ -77,10 +77,14 @@ def create_quiz():
 	question_text = "not blank"
 	print( "Enter blank question text to stop" )
 	while question_text != "":
+
+		# Get the question text
 		question_text = util.get_text( "Enter question text: " )
 		if question_text != "":
 			question = Question()
 			question.text = question_text
+
+			# Get the answer
 			answer_text = "not blank"
 			ansi.print_style( "Enter blank answer to stop.", ansi.Fore.WHITE2 )
 			while answer_text != "":
@@ -94,10 +98,22 @@ def create_quiz():
 				)
 			else:
 				print()
+
+				# Get the correct answer
 				ansi.print_style( question.text, ansi.Fore.WHITE2 )
 				question.correct_answer = util.get_option(
 					"Enter correct answer", question.answers
 				)
+
+				# Get the concepts
+				ansi.print_style( "Enter concepts; leave blank to skip.", ansi.Fore.WHITE2 )
+				concept_text = "not blank"
+				while concept_text != "":
+					concept_text = util.get_text( "Enter concept: " )
+					if concept_text != "":
+						question.concepts.append( concept_text )
+
+				# Add the question
 				quiz.questions.append( question )
 		print()
 	print( f"Quiz: {quiz.name} created with {len(quiz.questions)} questions." )

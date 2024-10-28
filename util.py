@@ -17,16 +17,17 @@ def get_option( prompt, options, is_alpha = False ):
 	while not is_valid:
 		msg = (
 			ansi.Fore.YELLOW +
-			f"{prompt} (1-{len(options)}): " +
+			f"{prompt} ({indices[0]}-{indices[len(options)-1]}): " +
 			ansi.Style.RESET_ALL
 		)
 		menu_option = input( msg )
-		if not menu_option.isdigit():
-			menu_option = menu_option.upper()
-		if menu_option in indices:
-			index = indices.index( menu_option )
-			if index >= 0 and index < len( options ):
-				return index
+		if menu_option != "":
+			if not menu_option.isdigit():
+				menu_option = menu_option.upper()
+			if menu_option in indices:
+				index = indices.index( menu_option )
+				if index >= 0 and index < len( options ):
+					return index
 		ansi.print_style(
 			"Invalid Selection",
 			ansi.Fore.RED + ansi.Style.BOLD

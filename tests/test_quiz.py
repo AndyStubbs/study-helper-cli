@@ -157,12 +157,21 @@ class TestQuiz( unittest.TestCase ):
 		question1.text = "What is 1+1?"
 		question1.answers = [ "1", "2", "3", "4" ]
 		question1.correct_answer = 1
+		question1.concepts.append( "Addition" )
 		quiz2.questions.append( question1 )
 		question2 = Question()
 		question2.text = "What is 2+2?"
 		question2.answers = [ "2", "3", "4", "5" ]
 		question2.correct_answer = 2
+		question2.concepts.append( "Addition" )
 		quiz2.questions.append( question2 )
+		question3 = Question()
+		question3.text = "What is 2-1?"
+		question3.answers = [ "1", "2", "3", "4" ]
+		question3.correct_answer = 2
+		question3.concepts.append( "Subtraction" )
+		question3.concepts.append( "Minus" )
+		quiz2.questions.append( question3 )
 		quiz2.save( True )
 		
 		# Check quiz1
@@ -184,4 +193,6 @@ class TestQuiz( unittest.TestCase ):
 		self.assertEqual( len( quiz2.questions ), len( quizCheck2.questions ) )
 		self.assertEqual( 1, quizCheck2.questions[ 0 ].correct_answer )
 		self.assertEqual( "What is 2+2?", quizCheck2.questions[ 1 ].text )
+		self.assertEqual( len( quiz2.questions[ 1 ].concepts ), len( quizCheck2.questions[ 1 ].concepts ) )
+		self.assertEqual( "Addition", quizCheck2.questions[ 0 ].concepts[ 0 ] )
 

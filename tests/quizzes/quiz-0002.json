@@ -10,7 +10,10 @@
 				"3",
 				"4"
 			],
-			"correct_answer": 1
+			"correct_answer": 1,
+			"concepts": [
+				"Addition"
+			]
 		},
 		{
 			"text": "What is 2+2?",
@@ -20,7 +23,24 @@
 				"4",
 				"5"
 			],
-			"correct_answer": 2
+			"correct_answer": 2,
+			"concepts": [
+				"Addition"
+			]
+		},
+		{
+			"text": "What is 2-1?",
+			"answers": [
+				"1",
+				"2",
+				"3",
+				"4"
+			],
+			"correct_answer": 2,
+			"concepts": [
+				"Subtraction",
+				"Minus"
+			]
 		}
 	]
 }
