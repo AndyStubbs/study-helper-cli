@@ -44,8 +44,12 @@ def load_quizzes():
 def select_quiz():
 	global quizzes
 	ansi.print_style( "\n== Select Quiz ==\n", ansi.Fore.GREEN )
-	quiz_list = list( map( lambda q: q.name, quizzes ) )
+	quiz_list = list( map(
+		lambda q: q.name + f" ({len(q.questions)} questions)",
+		quizzes
+	) )
 	quiz_index = util.get_option( "Select quiz", quiz_list )
+	
 	run_quiz( quizzes[ quiz_index ] )
 
 def run_quiz( quiz ):
@@ -55,7 +59,7 @@ def run_quiz( quiz ):
 	for question in quiz.questions:
 		print()
 		print( question.text )
-		answer = util.get_option( "Select answer", question.answers )
+		answer = util.get_option( "Select answer", question.answers, True )
 		if answer == question.correct_answer:
 			ansi.print_style( "Correct!", ansi.Fore.GREEN + ansi.Style.BOLD)
 		else:

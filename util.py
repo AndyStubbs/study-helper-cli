@@ -2,8 +2,17 @@ import os
 import math
 import ansi
 
-def get_option( prompt, options ):
-	print_columns( options )
+def get_option( prompt, options, is_alpha = False ):
+	if is_alpha:
+		all_alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		indices = ""
+		for i in range( 0, len( options ) ):
+			indices += all_alpha[ i ]
+	else:
+		indices = ""
+		for i in range( 1, len( options ) + 1 ):
+			indices += str( i )
+	print_columns( options, indices )
 	is_valid = False
 	while not is_valid:
 		msg = (
@@ -12,10 +21,12 @@ def get_option( prompt, options ):
 			ansi.Style.RESET_ALL
 		)
 		menu_option = input( msg )
-		if menu_option.isdigit():
-			index = int( menu_option )
-			if index > 0 and index < len( options ) + 1:
-				return index - 1
+		if not menu_option.isdigit():
+			menu_option = menu_option.upper()
+		if menu_option in indices:
+			index = indices.index( menu_option )
+			if index >= 0 and index < len( options ):
+				return index
 		ansi.print_style(
 			"Invalid Selection",
 			ansi.Fore.RED + ansi.Style.BOLD
@@ -31,10 +42,10 @@ def get_text( prompt, err_msg = "" ):
 			is_valid = True
 	return value
 
-def print_columns( options ):
+def print_columns( options, indices ):
 	if len( options ) <= 10:
 		for i in range( 0, len( options ) ):
-			print( f"{i+1}. {options[i]}" )
+			print( f"{indices[i]}. {options[i]}" )
 	else:
 		# Calculate the number of columns and rows
 		cols = math.ceil( len( options ) / 10 )
@@ -73,7 +84,7 @@ def print_columns( options ):
 			for col in range( cols ):
 				if row < len( columns ) and col < len( columns[ row ] ):
 					index, text = columns[ row ][ col ]
-					option_text = f"{index}. {text}"
+					option_text = f"{indices[index-1]}. {text}"
 					padding = column_widths[ col ] - len( option_text )
 					row_str += option_text + " " * padding
 			print( row_str )
