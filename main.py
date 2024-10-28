@@ -1,5 +1,6 @@
 import signal
 import sys
+import os
 
 import ansi
 from quiz import Quiz, Question
@@ -7,6 +8,7 @@ import util
 
 
 def main():
+	load_quizzes()
 	print()
 	ansi.print_style( "Study Helper 1.0", ansi.Fore.CYAN )
 	print( "Press Ctrl+C to exit at anytime\n" )
@@ -23,13 +25,41 @@ def display_menu():
 	option = util.get_option( "Enter selection", menu_options )
 	menu[ option ][ 2 ]()
 
-def run_quiz():
-	print( "Running Quiz" )
-	ansi.print_style( "\n== Run Quiz ==\n", ansi.Fore.GREEN )
-	temp = []
-	for i in range( 0, 10 ):
-		temp.append( f"Test {i} - dajsdfak jsdhfasjdfhasdjfhasdjfhasdf" )
-	util.get_option( "Select quiz", temp )
+def load_quizzes():
+	global quizzes
+	prefix = "quiz-"
+	postfix = ".json"
+	quiz_dir = "quizzes"
+	files = os.listdir( quiz_dir )
+	for file in files:
+		if file.startswith( prefix ) and file.endswith( postfix ):
+			file_path = os.path.join( quiz_dir, file )
+			try:
+				quiz = Quiz()
+				quiz.load_from_file( file_path )
+				quizzes.append( quiz )
+			except Exception as ex:
+				ansi.print_style( ex, ansi.Fore.RED2 )
+
+def select_quiz():
+	global quizzes
+	ansi.print_style( "\n== Select Quiz ==\n", ansi.Fore.GREEN )
+	quiz_list = list( map( lambda q: q.name, quizzes ) )
+	quiz_index = util.get_option( "Select quiz", quiz_list )
+	run_quiz( quizzes[ quiz_index ] )
+
+def run_quiz( quiz ):
+	ansi.print_style( f"\n== {quiz.name} ==\n", ansi.Fore.GREEN )
+	if quiz.description != "":
+		print( quiz.description )
+	for question in quiz.questions:
+		print()
+		print( question.text )
+		answer = util.get_option( "Select answer", question.answers )
+		if answer == question.correct_answer:
+			ansi.print_style( "Correct!", ansi.Fore.GREEN + ansi.Style.BOLD)
+		else:
+			ansi.print_style( "Wrong!", ansi.Fore.RED2 + ansi.Style.BOLD )
 
 def create_quiz():
 	ansi.print_style( "\n== Creating Quiz ==\n", ansi.Fore.GREEN )
@@ -70,9 +100,9 @@ def create_quiz():
 def edit_quiz():
 	print( "Editing Quiz" )
 
-
+quizzes = []
 menu = [
-	( "Run Quiz", "-r", run_quiz ),
+	( "Select Quiz", "-s", select_quiz ),
 	( "Create Quiz", "-c", create_quiz ),
 	( "Edit Quiz", "-e", edit_quiz )
 ]
