@@ -43,6 +43,10 @@ def get_text( prompt, err_msg = "" ):
 	return value
 
 def print_columns( options, indices ):
+	if indices[ 0 ] == "A":
+		is_alpha = True
+	else:
+		is_alpha = False
 	if len( options ) <= 10:
 		for i in range( 0, len( options ) ):
 			print( f"{indices[i]}. {options[i]}" )
@@ -84,7 +88,10 @@ def print_columns( options, indices ):
 			for col in range( cols ):
 				if row < len( columns ) and col < len( columns[ row ] ):
 					index, text = columns[ row ][ col ]
-					option_text = f"{indices[index-1]}. {text}"
+					if is_alpha:
+						option_text = f"{indices[index-1]}. {text}"
+					else:
+						option_text = f"{index}. {text}"
 					padding = column_widths[ col ] - len( option_text )
 					row_str += option_text + " " * padding
 			print( row_str )
