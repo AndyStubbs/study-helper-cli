@@ -31,7 +31,7 @@ class Question():
 			)
 		self.answers = []
 		for answer in data[ "answers" ]:
-			if isinstance( answer, str ):
+			if isinstance( answer, str ) and answer != "":
 				self.answers.append( answer )
 			else:
 				raise ValueError(
@@ -54,11 +54,15 @@ class Question():
 		if "concepts" in data:
 			if not isinstance( data[ "concepts" ], list ):
 				raise ValueError(
-					f"Invalid format for concepts in question '{self.text}'"
+					f"Invalid format for concepts in question '{self.text}'."
 				)
 			for concept in data[ "concepts" ]:
-				if isinstance( concept, str ):
+				if isinstance( concept, str ) and concept != "":
 					self.concepts.append( concept )
+				else:
+					raise ValueError(
+						f"Invalid format for concept in question '{self.text}'."
+					)
 
 
 class Quiz():
@@ -66,6 +70,7 @@ class Quiz():
 		self.name = ""
 		self.description = ""
 		self.questions = []
+		self.topic = ""
 	
 	def load_from_file( self, filename ):
 		with open( filename, "r" ) as file:
@@ -103,6 +108,12 @@ class Quiz():
 			question = Question()
 			question.load( q )
 			self.questions.append( question )
+		
+		# Load Topic
+		if "topic" in data:
+			if not isinstance( data[ "topic" ], str ):
+				raise ValueError( "Invalid format for topic." )
+			self.topic = data[ "topic" ]
 	
 	def save( self, is_test = False ):
 		# Serialize the quiz data

@@ -53,7 +53,8 @@ class TestQuiz( unittest.TestCase ):
 		files = [
 			( "name", "data/quiz-bad-05.json" ),
 			( "description", "data/quiz-bad-06.json" ),
-			( "questions", "data/quiz-bad-07.json" )
+			( "questions", "data/quiz-bad-07.json" ),
+			( "topic", "data/quiz-bad-26.json" )
 		]
 		for ( key, name ) in files:
 			filename = os.path.join( current_dir, name )
@@ -70,7 +71,7 @@ class TestQuiz( unittest.TestCase ):
 		files = [
 			( "text", "data/quiz-bad-08.json" ),
 			( "answers", "data/quiz-bad-09.json" ),
-			( "correct_answer", "data/quiz-bad-10.json" ),
+			( "correct_answer", "data/quiz-bad-10.json" )
 		]
 		for ( key, name ) in files:
 			filename = os.path.join( current_dir, name )
@@ -94,6 +95,10 @@ class TestQuiz( unittest.TestCase ):
 			( "correct_answer", "data/quiz-bad-17.json", " 'Test question?'." ),
 			( "correct_answer", "data/quiz-bad-18.json", " 'Test question?'." ),
 			( "answer", "data/quiz-bad-19.json", " 'Test question?'." ),
+			( "answer", "data/quiz-bad-22.json", " 'Test question?'." ),
+			( "concepts", "data/quiz-bad-23.json", " 'Test question?'." ),
+			( "concept", "data/quiz-bad-24.json", " 'Test question?'." ),
+			( "concept", "data/quiz-bad-25.json", " 'Test question?'." )
 		]
 		for ( key, name, end ) in files:
 			filename = os.path.join( current_dir, name )
@@ -131,6 +136,19 @@ class TestQuiz( unittest.TestCase ):
 		self.assertEqual( "2", quiz.questions[ 2 ].answers[ 1 ] )
 		self.assertEqual( 3, quiz.questions[ 3 ].correct_answer )
 		self.assertEqual( "4", quiz.questions[ 3 ].answers[ 3 ] )
+	
+	def test_load_quiz2( self ):
+		current_dir = os.path.dirname( __file__ )
+		filename = os.path.join( current_dir, "data/quiz-good-02.json" )
+		quiz = Quiz()
+		quiz.load_from_file( filename )
+		
+		# Checks
+		self.assertEqual( "test 2", quiz.name )
+		self.assertEqual( "", quiz.description )
+		self.assertEqual( 3, len( quiz.questions ) )
+		self.assertEqual( "Test", quiz.topic )
+		self.assertEqual( "D", quiz.questions[ 1 ].concepts[ 1 ] )
 	
 	def test_save_quiz( self ):
 		

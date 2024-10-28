@@ -71,15 +71,20 @@ def run_quiz( quiz ):
 def create_quiz():
 	ansi.print_style( "\n== Creating Quiz ==\n", ansi.Fore.GREEN )
 	quiz = Quiz()
+
+	# Get the quiz name
 	quiz.name = util.get_text( "Enter quiz name: ", "Name cannot be blank." )
-	quiz.description = util.get_text( "Enter quiz description: " )
+	quiz.description = util.get_text( "Enter quiz description (blank to skip): " )
 	
+	# Get the quiz topic
+	quiz.topic = util.get_text( "Enter quiz topic (blank to skip): " )
+	
+	# Get the questions
 	question_text = "not blank"
-	print( "Enter blank question text to stop" )
 	while question_text != "":
 
 		# Get the question text
-		question_text = util.get_text( "Enter question text: " )
+		question_text = util.get_text( "Enter question text (blank to stop): " )
 		if question_text != "":
 			question = Question()
 			question.text = question_text
@@ -106,10 +111,9 @@ def create_quiz():
 				)
 
 				# Get the concepts
-				ansi.print_style( "Enter concepts; leave blank to skip.", ansi.Fore.WHITE2 )
 				concept_text = "not blank"
 				while concept_text != "":
-					concept_text = util.get_text( "Enter concept: " )
+					concept_text = util.get_text( "Enter concept (blank to skip/stop): " )
 					if concept_text != "":
 						question.concepts.append( concept_text )
 
