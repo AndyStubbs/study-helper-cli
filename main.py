@@ -1,11 +1,14 @@
 import signal
 import sys
 import os
-import random
 
 import ansi
-from quiz import Quiz, Question
+from quiz import Quiz
 import util
+from create import create_quiz
+from edit import edit_quiz
+from run import run_quiz
+from quizzes import quizzes
 
 
 def main():
@@ -21,13 +24,17 @@ def handle_quit( sig, frame ):
 	sys.exit( 0 )
 
 def display_menu():
+	menu = [
+		( "Run Quiz", "-r", run_quiz ),
+		( "Create Quiz", "-c", create_quiz ),
+		( "Edit Quiz", "-e", edit_quiz )
+	]
 	menu_options = list( map( lambda m: m[ 0 ], menu ) )
 	ansi.print_style( "\n== Main Menu ==\n", ansi.Fore.GREEN )
 	option = util.get_option( "Enter selection", menu_options )
 	menu[ option ][ 2 ]()
 
 def load_quizzes():
-	global quizzes
 	prefix = "quiz-"
 	postfix = ".json"
 	quiz_dir = "quizzes"
@@ -41,98 +48,6 @@ def load_quizzes():
 				quizzes.append( quiz )
 			except Exception as ex:
 				ansi.print_style( ex, ansi.Fore.RED2 )
-
-def select_quiz():
-	global quizzes
-	ansi.print_style( "\n== Select Quiz ==\n", ansi.Fore.GREEN )
-	quiz_list = list( map(
-		lambda q: q.name + f" ({len(q.questions)} questions)",
-		quizzes
-	) )
-	quiz_index = util.get_option( "Select quiz", quiz_list )
-	
-	run_quiz( quizzes[ quiz_index ] )
-
-def run_quiz( quiz ):
-	ansi.print_style( f"\n== {quiz.name} ==\n", ansi.Fore.GREEN )
-	if quiz.description != "":
-		print( quiz.description )
-	for question in quiz.questions:
-		print()
-		print( question.text )
-		answers =  question.answers[ : ]
-		random.shuffle( answers )
-		answer = util.get_option( "Select answer", answers, True )
-		if answers[ answer ] == question.answers[ question.correct_answer ]:
-			ansi.print_style( "Correct!", ansi.Fore.GREEN + ansi.Style.BOLD )
-		else:
-			ansi.print_style( "Wrong!", ansi.Fore.RED2 + ansi.Style.BOLD )
-
-def create_quiz():
-	ansi.print_style( "\n== Creating Quiz ==\n", ansi.Fore.GREEN )
-	quiz = Quiz()
-
-	# Get the quiz name
-	quiz.name = util.get_text( "Enter quiz name: ", "Name cannot be blank." )
-	quiz.description = util.get_text( "Enter quiz description (blank to skip): " )
-	
-	# Get the quiz topic
-	quiz.topic = util.get_text( "Enter quiz topic (blank to skip): " )
-	
-	# Get the questions
-	question_text = "not blank"
-	while question_text != "":
-
-		# Get the question text
-		question_text = util.get_text( "Enter question text (blank to stop): " )
-		if question_text != "":
-			question = Question()
-			question.text = question_text
-
-			# Get the answer
-			answer_text = "not blank"
-			ansi.print_style( "Enter blank answer to stop.", ansi.Fore.WHITE2 )
-			while answer_text != "":
-				answer_text = util.get_text( "Enter answer: " )
-				if answer_text != "":
-					question.answers.append( answer_text )
-			if len( question.answers ) == 0:
-				ansi.print_style(
-					"No answers entered; question not saved.",
-					ansi.Fore.RED2
-				)
-			else:
-				print()
-
-				# Get the correct answer
-				ansi.print_style( question.text, ansi.Fore.WHITE2 )
-				question.correct_answer = util.get_option(
-					"Enter correct answer", question.answers
-				)
-
-				# Get the concepts
-				concept_text = "not blank"
-				while concept_text != "":
-					concept_text = util.get_text( "Enter concept (blank to skip/stop): " )
-					if concept_text != "":
-						question.concepts.append( concept_text )
-
-				# Add the question
-				quiz.questions.append( question )
-		print()
-	print( f"Quiz: {quiz.name} created with {len(quiz.questions)} questions." )
-	quiz.save()
-
-
-def edit_quiz():
-	print( "Editing Quiz" )
-
-quizzes = []
-menu = [
-	( "Select Quiz", "-s", select_quiz ),
-	( "Create Quiz", "-c", create_quiz ),
-	( "Edit Quiz", "-e", edit_quiz )
-]
 
 if __name__ == '__main__':
 	main()

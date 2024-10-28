@@ -64,7 +64,6 @@ class Question():
 						f"Invalid format for concept in question '{self.text}'."
 					)
 
-
 class Quiz():
 	def __init__( self ):
 		self.name = ""
@@ -114,24 +113,9 @@ class Quiz():
 			if not isinstance( data[ "topic" ], str ):
 				raise ValueError( "Invalid format for topic." )
 			self.topic = data[ "topic" ]
-	
+
 	def save( self, is_test = False ):
-		# Serialize the quiz data
-		data = {
-			"name": self.name,
-			"description": self.description,
-			"questions": []
-		}
-		for question in self.questions:
-			q_data = {
-				"text": question.text,
-				"answers": [],
-				"correct_answer": question.correct_answer,
-				"concepts": question.concepts
-			}
-			for answer in question.answers:
-				q_data[ "answers" ].append( answer )
-			data[ "questions" ].append( q_data )
+		data = self.serialize()
 		
 		# Create the quiz path
 		if is_test:
@@ -158,3 +142,22 @@ class Quiz():
 		# Write the json file
 		with open( filename, "w" ) as file:
 			file.write( json.dumps( data, indent = "\t" ) )
+	
+	def serialize( self ):
+		data = {
+			"name": self.name,
+			"description": self.description,
+			"questions": [],
+			"topic": self.topic
+		}
+		for question in self.questions:
+			q_data = {
+				"text": question.text,
+				"answers": [],
+				"correct_answer": question.correct_answer,
+				"concepts": question.concepts
+			}
+			for answer in question.answers:
+				q_data[ "answers" ].append( answer )
+			data[ "questions" ].append( q_data )
+		return data

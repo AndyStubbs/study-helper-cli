@@ -1,5 +1,6 @@
 {
 	"name": "Blank Quiz",
 	"description": "",
-	"questions": []
+	"questions": [],
+	"topic": ""
 }

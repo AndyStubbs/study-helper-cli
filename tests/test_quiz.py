@@ -171,6 +171,8 @@ class TestQuiz( unittest.TestCase ):
 		# Create a quiz with some questions
 		quiz2 = Quiz()
 		quiz2.name = "Quiz With Data"
+		quiz2.description = "Test Description"
+		quiz2.topic = "Topic"
 		question1 = Question()
 		question1.text = "What is 1+1?"
 		question1.answers = [ "1", "2", "3", "4" ]
@@ -208,6 +210,7 @@ class TestQuiz( unittest.TestCase ):
 		quizCheck2.load_from_file( quiz2_path )
 		self.assertEqual( quiz2.name, quizCheck2.name )
 		self.assertEqual( quiz2.description, quizCheck2.description )
+		self.assertEqual( quiz2.topic, quizCheck2.topic )
 		self.assertEqual( len( quiz2.questions ), len( quizCheck2.questions ) )
 		self.assertEqual( 1, quizCheck2.questions[ 0 ].correct_answer )
 		self.assertEqual( "What is 2+2?", quizCheck2.questions[ 1 ].text )

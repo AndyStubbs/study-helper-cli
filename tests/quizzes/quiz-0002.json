@@ -1,6 +1,6 @@
 {
 	"name": "Quiz With Data",
-	"description": "",
+	"description": "Test Description",
 	"questions": [
 		{
 			"text": "What is 1+1?",
@@ -42,5 +42,6 @@
 				"Minus"
 			]
 		}
-	]
+	],
+	"topic": "Topic"
 }
