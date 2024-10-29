@@ -5,13 +5,13 @@ import ansi
 def get_option( prompt, options, is_alpha = False ):
 	if is_alpha:
 		all_alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		indices = ""
+		indices = []
 		for i in range( 0, len( options ) ):
-			indices += all_alpha[ i ]
+			indices.append( all_alpha[ i ] )
 	else:
-		indices = ""
+		indices = []
 		for i in range( 1, len( options ) + 1 ):
-			indices += str( i )
+			indices.append( str( i ) )
 	print_columns( options, indices )
 	is_valid = False
 	while not is_valid:
@@ -38,19 +38,21 @@ def get_text( prompt, err_msg = "" ):
 	while not is_valid:
 		value = input( prompt )
 		if value == "" and err_msg != "":
-			print( err_msg )
+			ansi.print_style(
+				err_msg,
+				ansi.Fore.RED + ansi.Style.BOLD
+			)
 		else:
 			is_valid = True
 	return value
 
 def print_columns( options, indices ):
-	if indices[ 0 ] == "A":
-		is_alpha = True
-	else:
-		is_alpha = False
 	if len( options ) <= 10:
 		for i in range( 0, len( options ) ):
-			print( f"{indices[i]}. {options[i]}" )
+			if i < len( indices ):
+				print( f"{indices[i]}. {options[i]}" )
+			else:
+				print( f"{options[i]}" )
 	else:
 		# Calculate the number of columns and rows
 		cols = math.ceil( len( options ) / 10 )
@@ -89,10 +91,10 @@ def print_columns( options, indices ):
 			for col in range( cols ):
 				if row < len( columns ) and col < len( columns[ row ] ):
 					index, text = columns[ row ][ col ]
-					if is_alpha:
+					if index - 1 < len( indices ):
 						option_text = f"{indices[index-1]}. {text}"
 					else:
-						option_text = f"{index}. {text}"
+						option_text = f"{text}"
 					padding = column_widths[ col ] - len( option_text )
 					row_str += option_text + " " * padding
 			print( row_str )

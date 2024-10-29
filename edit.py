@@ -14,7 +14,11 @@ def edit_quiz_single( quiz ):
 	undo_data = quiz.serialize()
 	is_editing = True
 	while is_editing:
-		ansi.print_style( f"\n== Editing Quiz '{quiz.name}' ==\n", ansi.Fore.GREEN )
+		ansi.print_style( f"\n== Editing Quiz ==\n", ansi.Fore.GREEN )
+		print( f"{ansi.Fore.YELLOW2}Name:{ansi.Fore.RESET} {quiz.name}" )
+		print( f"{ansi.Fore.YELLOW2}Description:{ansi.Fore.RESET} {quiz.description}" )
+		print( f"{ansi.Fore.YELLOW2}Topic:{ansi.Fore.RESET} {quiz.topic}" )
+		print( f"{ansi.Fore.YELLOW2}Questions:{ansi.Fore.RESET} {len(quiz.questions)}\n" )
 		options = [
 			"Edit Name",
 			"Edit Description",
@@ -24,6 +28,7 @@ def edit_quiz_single( quiz ):
 			"Undo Changes"
 		]
 		option = util.get_option( "Enter selection", options )
+		print()
 		if options[ option ] == "Edit Name":
 			edit_quiz_name( quiz )
 		elif options[ option ] == "Edit Description":
@@ -40,46 +45,76 @@ def edit_quiz_single( quiz ):
 			is_editing = False
 
 def edit_quiz_name( quiz ):
-	print( quiz.name )
+	print( f"{ansi.Fore.YELLOW2}Edit Name:{ansi.Fore.RESET} {quiz.name}" )
 	quiz.name = util.get_text( "Enter new name: ", "Name cannot be blank" )
 
 def edit_quiz_description( quiz ):
-	print( quiz.description )
+	print( f"{ansi.Fore.YELLOW2}Edit Description:{ansi.Fore.RESET} {quiz.description}" )
 	quiz.description = util.get_text( "Enter new description: " )
 
 def edit_topic( quiz ):
-	print( quiz.topic )
+	print( f"{ansi.Fore.YELLOW2}Edit Topic:{ansi.Fore.RESET} {quiz.topic}" )
 	quiz.topic = util.get_text( "Enter new topic: " )
 
 def edit_questions( quiz ):
-	question_index = util.get_option( "Select question to edit", list( map( lambda q: q.text, quiz.questions ) ) )
+	questions = list( map( lambda q: q.text, quiz.questions ) )
+	questions.append( f"{ansi.Fore.GREEN}Create new question{ansi.Fore.RESET}" )
+	questions.append( f"{ansi.Fore.RED2}Cancel{ansi.Fore.RESET}" )
+	question_index = util.get_option( "Select question to edit", questions )
+	print()
+	if question_index >= len( quiz.questions ):
+		return
 	question = quiz.questions[ question_index ]
-	print( f"\n{question.text}" )
+	print( f"{ansi.Fore.YELLOW2}Edit Question Text:{ansi.Fore.RESET} {question.text}" )
 	options = [
-		( "Edit text", edit_text ),
-		( "Edit answers", edit_answers ),
-		( "Edit correct answer", edit_correct_answer ),
-		( "Edit concepts", edit_concepts )
+		"Edit text",
+		"Edit answers",
+		"Edit correct answer",
+		"Edit concepts",
+		f"{ansi.Fore.RED2}Cancel{ansi.Fore.RESET}"
 	]
-	option = util.get_option( "Enter selection", list( map( lambda o: o[ 0 ], options ) ) )
-	options[ option ]( question )
+	option = util.get_option( "Enter selection", options )
+	print()
+	if options[ option ] == "Edit text":
+		edit_text( quiz, question_index )
+	elif options[ option ] == "Edit answers":
+		edit_answers( question )
+	elif options[ option ] == "Edit correct answer":
+		edit_correct_answer( question )
+	elif options[ option ] == "Edit concepts":
+		edit_concepts( question )
 
-def edit_text( quiz, question ):
-	print( question.text )
+def edit_text( quiz, question_index ):
+	question = quiz.questions[ question_index ]
+	print( f"{ansi.Fore.YELLOW2}Edit Text:{ansi.Fore.RESET} {question.text}" )
 	text = util.get_text( "Enter new text (blank to delete): " )
 	if text == "":
-		for q in quiz.questions:
-			if q.text == question.text:
-				quiz.questions.remove( q )
+		del quiz.questions[ question_index ]
 	else:
 		text = question.text
 
 def edit_answers( question ):
-	print( question.text )
-	question.text = util.get_text( "Enter new text: ", "Text cannot be blank" )
+	ansi.print_style( f"Edit answers", ansi.Fore.YELLOW2 )
+	answers = question.answers[ : ]
+	answers.append( f"{ansi.Fore.RED2}Cancel{ansi.Fore.RESET}" )
+	answer_index = util.get_option( "Select answer to edit", answers )
+	print()
+	if answer_index <= len( question.answers ):
+		return
+	new_answer = util.get_text( "Enter new answer (blank to delete): " )
+	if new_answer == "":
+		question.answers.remove( answer_index )
+	elif new_answer < len( question.answers ):
+		question.answers[ answer_index ] = new_answer
 
 def edit_correct_answer( question ):
-	pass
+	ansi.print_style( f"Edit correct answer", ansi.Fore.YELLOW2 )
+	answers = question.answers[ : ]
+	answers.append( f"{ansi.Fore.RED2}Cancel{ansi.Fore.RESET}" )
+	correct_answer = util.get_option( "Select correct answer", answers )
+	print()
+	if correct_answer < len( question.answers ):
+		question.correct_answer = correct_answer
 
 def edit_concepts( question ):
 	pass
