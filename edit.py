@@ -53,7 +53,6 @@ def edit_quiz_single( quiz ):
 			delete_quiz( quiz )
 			is_editing = False
 
-
 def edit_quiz_name( quiz ):
 	print( f"{ansi.Fore.YELLOW2}Edit Name:{ansi.Fore.RESET} {quiz.name}" )
 	quiz.name = util.get_text( "Enter new name: ", "Name cannot be blank" )

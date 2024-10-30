@@ -16,13 +16,12 @@ def create_quiz():
 	quiz.topic = util.get_text( "Enter quiz topic (blank to skip): " )
 	
 	# Get the questions"
-
 	while True:
 		question = create_new_question()
 		print()
 		if question == None:
 			break
-		if question != None:
+		else:
 			quiz.questions.append( question )
 
 	print( f"Quiz: {quiz.name} created with {len(quiz.questions)} questions." )
@@ -49,6 +48,7 @@ def create_new_question():
 				"No answers entered; question not saved.",
 				ansi.Fore.RED2
 			)
+			return None
 		else:
 			print()
 
