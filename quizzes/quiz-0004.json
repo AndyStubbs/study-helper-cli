@@ -1,0 +1,29 @@
+{
+	"filename": "quiz-0004.json",
+	"name": "Test 6",
+	"topic": "",
+	"description": "",
+	"questions": [
+		{
+			"text": "What?",
+			"answers": [
+				"yes",
+				"No"
+			],
+			"correct_answer": 0,
+			"concepts": []
+		},
+		{
+			"text": "Yes?",
+			"answers": [
+				"Yes",
+				"No"
+			],
+			"correct_answer": 0,
+			"concepts": [
+				"Go yes",
+				"Go no"
+			]
+		}
+	]
+}

@@ -25,6 +25,7 @@ def select_quiz():
 		lambda q: q.name + f" ({len(q.questions)} questions)",
 		quizzes
 	) )
+	quiz_list.append( f"{ansi.Fore.MAGENTA2}Back{ansi.Fore.RESET}" )
 	quiz_index = util.get_option( "Select quiz", quiz_list )
 	return quiz_index
 

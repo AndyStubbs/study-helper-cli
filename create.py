@@ -28,41 +28,46 @@ def create_quiz():
 	quiz.save()
 	quizzes.append( quiz )
 
-
 def create_new_question():
-	# Get the question text
 	question_text = util.get_text( "Enter question text (blank to stop): " )
 	if question_text != "":
 		question = Question()
 		question.text = question_text
-
-		# Get the answer
-		answer_text = "not blank"
-		ansi.print_style( "Enter blank answer to stop.", ansi.Fore.WHITE2 )
-		while answer_text != "":
-			answer_text = util.get_text( "Enter answer: " )
-			if answer_text != "":
-				question.answers.append( answer_text )
-		if len( question.answers ) == 0:
-			ansi.print_style(
-				"No answers entered; question not saved.",
-				ansi.Fore.RED2
-			)
+		if not create_new_answers( question ):
 			return None
-		else:
-			print()
-
-			# Get the correct answer
-			ansi.print_style( question.text, ansi.Fore.WHITE2 )
-			question.correct_answer = util.get_option(
-				"Enter correct answer", question.answers
-			)
-
-			# Get the concepts
-			concept_text = "not blank"
-			while concept_text != "":
-				concept_text = util.get_text( "Enter concept (blank to skip/stop): " )
-				if concept_text != "":
-					question.concepts.append( concept_text )
+		print()
+		set_correct_answer( question )
+		print()
+		create_new_concepts( question )
 		return question
 	return None
+
+def create_new_answers( question ):
+	
+	# Get the answer
+	answer_text = "not blank"
+	ansi.print_style( "Enter blank answer to stop.", ansi.Fore.WHITE2 )
+	while answer_text != "":
+		answer_text = util.get_text( "Enter answer: " )
+		if answer_text != "":
+			question.answers.append( answer_text )
+	if len( question.answers ) == 0:
+		ansi.print_style(
+			"No answers entered; question not saved.",
+			ansi.Fore.RED2
+		)
+		return False
+	return True
+
+def set_correct_answer( question ):
+	ansi.print_style( question.text, ansi.Fore.WHITE2 )
+	question.correct_answer = util.get_option(
+		"Enter correct answer", question.answers
+	)
+
+def create_new_concepts( question ):
+	concept_text = "not blank"
+	while concept_text != "":
+		concept_text = util.get_text( "Enter concept (blank to skip/stop): " )
+		if concept_text != "":
+			question.concepts.append( concept_text )

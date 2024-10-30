@@ -1,0 +1,32 @@
+{
+	"filename": "quiz-0002.json",
+	"name": "Test 2",
+	"topic": "",
+	"description": "",
+	"questions": [
+		{
+			"text": "What is it?",
+			"answers": [
+				"A",
+				"2",
+				"3",
+				"4"
+			],
+			"correct_answer": 0,
+			"concepts": []
+		},
+		{
+			"text": "What is that?",
+			"answers": [
+				"this",
+				"me",
+				"that",
+				"cat"
+			],
+			"correct_answer": 2,
+			"concepts": [
+				"Not good"
+			]
+		}
+	]
+}

@@ -8,6 +8,8 @@ def run_quiz():
 		ansi.print_style( f"No quizzes to run", ansi.Fore.RED2 )
 		return
 	quiz_index = select_quiz()
+	if quiz_index >= len( quizzes ):
+		return
 	start_quiz( quizzes[ quiz_index ] )
 
 def start_quiz( quiz ):
