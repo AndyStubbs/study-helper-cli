@@ -66,15 +66,17 @@ class Question():
 
 class Quiz():
 	def __init__( self ):
+		self.filename = ""
 		self.name = ""
+		self.topic = ""
 		self.description = ""
 		self.questions = []
-		self.topic = ""
 	
 	def load_from_file( self, filename ):
 		with open( filename, "r" ) as file:
 			data = json.load( file )
 		self.load( data )
+		self.filename = os.path.basename( filename )
 	
 	def load( self, data ):
 		# Check if the data is a dictionary
@@ -113,42 +115,43 @@ class Quiz():
 			if not isinstance( data[ "topic" ], str ):
 				raise ValueError( "Invalid format for topic." )
 			self.topic = data[ "topic" ]
+		
+		if "filename" in data:
+			if isinstance( data[ "filename" ], str ):
+				self.filename = data[ "filename" ]
 
-	def save( self, is_test = False ):
-		data = self.serialize()
-		
+	def save( self, subpath = "quizzes" ):
 		# Create the quiz path
-		if is_test:
-			quiz_folder = os.path.join( "tests/quizzes" )
-		else:
-			quiz_folder = os.path.join( "quizzes" )
-		
+		quiz_folder = os.path.join( subpath )
+
 		if not os.path.exists( quiz_folder ):
 			os.makedirs( quiz_folder )
 		
-		# Count how many quizzes are already saved
-		prefix = "quiz-"
-		postfix = ".json"
+		# Set the filename
 		cnt = 1
-		for filename in os.listdir( quiz_folder ):
-			if filename.startswith( prefix ) and filename.endswith( postfix ):
+		if self.filename == "":
+			self.filename = self._create_filename( cnt )
+			filepath = os.path.join( quiz_folder, self.filename )
+			while os.path.exists( filepath ):
 				cnt += 1
-		
-		# Create the filename
-		cnt = str( cnt )
-		name = prefix + "0" * ( 5 - len( cnt ) - 1 ) + cnt + postfix
-		filename = os.path.join( quiz_folder, name )
+				filename = self._create_filename( cnt )
+				filepath = os.path.join( quiz_folder, filename )
+				self.filename = filename
+		else:
+			filepath = os.path.join( quiz_folder, self.filename )
 		
 		# Write the json file
-		with open( filename, "w" ) as file:
-			file.write( json.dumps( data, indent = "\t" ) )
+		data = self.serialize()
+		with open( filepath, "w" ) as file:
+			x = file.write( json.dumps( data, indent = "\t" ) )
 	
 	def serialize( self ):
 		data = {
 			"name": self.name,
 			"description": self.description,
 			"questions": [],
-			"topic": self.topic
+			"topic": self.topic,
+			"filename": self.filename
 		}
 		for question in self.questions:
 			q_data = {
@@ -161,3 +164,9 @@ class Quiz():
 				q_data[ "answers" ].append( answer )
 			data[ "questions" ].append( q_data )
 		return data
+
+	def _create_filename( self, cnt ):
+		prefix = "quiz-"
+		postfix = ".json"
+		filenumber = "0" * ( 5 - len( str( cnt ) ) - 1 ) + str( cnt )
+		return prefix + filenumber + postfix

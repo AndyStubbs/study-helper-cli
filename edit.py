@@ -1,10 +1,14 @@
 import ansi
 import util
+import create
 from run import select_quiz
 from quizzes import quizzes
 
 
 def edit_quiz():
+	if len( quizzes ) == 0:
+		ansi.print_style( f"No quizzes to edit", ansi.Fore.RED2 )
+		return
 	ansi.print_style( "\n== Edit Quiz ==\n", ansi.Fore.GREEN )
 	quiz_index = select_quiz()
 	quiz = quizzes[ quiz_index ]
@@ -57,15 +61,19 @@ def edit_topic( quiz ):
 	quiz.topic = util.get_text( "Enter new topic: " )
 
 def edit_questions( quiz ):
+	create_new_question_text = f"{ansi.Fore.GREEN}Create new question{ansi.Fore.RESET}"
 	questions = list( map( lambda q: q.text, quiz.questions ) )
-	questions.append( f"{ansi.Fore.GREEN}Create new question{ansi.Fore.RESET}" )
+	questions.append( create_new_question_text )
 	questions.append( f"{ansi.Fore.RED2}Cancel{ansi.Fore.RESET}" )
 	question_index = util.get_option( "Select question to edit", questions )
 	print()
+	if questions[ question_index ] == create_new_question_text:
+		create_new_question( quiz )
+		return
 	if question_index >= len( quiz.questions ):
 		return
 	question = quiz.questions[ question_index ]
-	print( f"{ansi.Fore.YELLOW2}Edit Question Text:{ansi.Fore.RESET} {question.text}" )
+	print( f"{ansi.Fore.YELLOW2}Edit Question: {ansi.Fore.RESET} {question.text}" )
 	options = [
 		"Edit text",
 		"Edit answers",
@@ -75,7 +83,7 @@ def edit_questions( quiz ):
 	]
 	option = util.get_option( "Enter selection", options )
 	print()
-	if options[ option ] == "Edit text":
+	if options[ option ] == "Edit question text":
 		edit_text( quiz, question_index )
 	elif options[ option ] == "Edit answers":
 		edit_answers( question )
@@ -118,6 +126,12 @@ def edit_correct_answer( question ):
 
 def edit_concepts( question ):
 	pass
+
+def create_new_question( quiz ):
+	question = create.create_new_question()
+	if question != None:
+		quiz.questions.append( question )
+
 
 def save_changes( quiz ):
 	quiz.save()

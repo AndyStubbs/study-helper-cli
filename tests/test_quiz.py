@@ -150,23 +150,15 @@ class TestQuiz( unittest.TestCase ):
 		self.assertEqual( "Test", quiz.topic )
 		self.assertEqual( "D", quiz.questions[ 1 ].concepts[ 1 ] )
 	
-	def test_save_quiz( self ):
-		
+	def test_00_save_quiz( self ):
 		# Get pathnames
 		current_dir = os.path.dirname( __file__ )
 		quiz_dir = os.path.join( current_dir, "quizzes" )
 		
-		# Remove any existing test quizzes
-		files = os.listdir( quiz_dir )
-		for file in files:
-			file_path = os.path.join( quiz_dir, file )
-			if os.path.isfile( file_path ):
-				os.remove( file_path )
-		
 		# Create a blank quiz
 		quiz1 = Quiz()
 		quiz1.name = "Blank Quiz"
-		quiz1.save( True )
+		quiz1.save( "tests/quizzes" )
 		
 		# Create a quiz with some questions
 		quiz2 = Quiz()
@@ -192,7 +184,7 @@ class TestQuiz( unittest.TestCase ):
 		question3.concepts.append( "Subtraction" )
 		question3.concepts.append( "Minus" )
 		quiz2.questions.append( question3 )
-		quiz2.save( True )
+		quiz2.save( "tests/quizzes" )
 		
 		# Check quiz1
 		quiz1_path = os.path.join( quiz_dir, "quiz-0001.json" )
@@ -217,3 +209,32 @@ class TestQuiz( unittest.TestCase ):
 		self.assertEqual( len( quiz2.questions[ 1 ].concepts ), len( quizCheck2.questions[ 1 ].concepts ) )
 		self.assertEqual( "Addition", quizCheck2.questions[ 0 ].concepts[ 0 ] )
 
+	def test_01_edit_and_save_quiz( self ):
+
+		# Get pathnames
+		current_dir = os.path.dirname( __file__ )
+		quiz_dir = os.path.join( current_dir, "quizzes" )
+
+		# Create initial quiz
+		quiz1 = Quiz()
+		quiz1.name = "Blank Quiz 3"
+		quiz1.save( "tests/quizzes" )
+		quiz_path = os.path.join( quiz_dir, quiz1.filename )
+
+		# Load the same quiz from file
+		quiz2 = Quiz()
+		quiz2.load_from_file( quiz_path )
+
+		# Make sure the quiz loads
+		self.assertEqual( quiz1.name, quiz2.name )
+
+		# Make a change and save it again
+		quiz2.name = "Blank Quiz 3 - Updated"
+		quiz2.save( "tests/quizzes" )
+
+		# Load it again
+		quiz3 = Quiz()
+		quiz3.load_from_file( quiz_path )
+
+		# Make sure the changed data was saved
+		self.assertEqual( quiz3.name, quiz2.name )

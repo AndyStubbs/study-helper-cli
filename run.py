@@ -4,6 +4,9 @@ import util
 from quizzes import select_quiz, quizzes
 
 def run_quiz():
+	if len( quizzes ) == 0:
+		ansi.print_style( f"No quizzes to run", ansi.Fore.RED2 )
+		return
 	quiz_index = select_quiz()
 	start_quiz( quizzes[ quiz_index ] )
 
