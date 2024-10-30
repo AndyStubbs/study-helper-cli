@@ -147,11 +147,11 @@ class Quiz():
 	
 	def serialize( self ):
 		data = {
+			"filename": self.filename,
 			"name": self.name,
-			"description": self.description,
-			"questions": [],
 			"topic": self.topic,
-			"filename": self.filename
+			"description": self.description,
+			"questions": []
 		}
 		for question in self.questions:
 			q_data = {
@@ -164,6 +164,14 @@ class Quiz():
 				q_data[ "answers" ].append( answer )
 			data[ "questions" ].append( q_data )
 		return data
+
+	def delete( self, subpath = "quizzes" ):
+		quiz_folder = os.path.join( subpath )
+		filepath = os.path.join( quiz_folder, self.filename )
+		if os.path.isfile( filepath ):
+			os.remove( filepath )
+		else:
+			raise FileNotFoundError
 
 	def _create_filename( self, cnt ):
 		prefix = "quiz-"

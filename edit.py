@@ -18,6 +18,7 @@ def edit_quiz_single( quiz ):
 	undo_data = quiz.serialize()
 	is_editing = True
 	while is_editing:
+		delete_quiz_text = f"{ansi.Fore.RED2}Delete Quiz{ansi.Fore.RESET}"
 		ansi.print_style( f"\n== Editing Quiz ==\n", ansi.Fore.GREEN )
 		print( f"{ansi.Fore.YELLOW2}Name:{ansi.Fore.RESET} {quiz.name}" )
 		print( f"{ansi.Fore.YELLOW2}Description:{ansi.Fore.RESET} {quiz.description}" )
@@ -29,7 +30,8 @@ def edit_quiz_single( quiz ):
 			"Edit Topic",
 			"Edit Questions",
 			"Save Changes",
-			"Undo Changes"
+			"Undo Changes",
+			delete_quiz_text
 		]
 		option = util.get_option( "Enter selection", options )
 		print()
@@ -47,6 +49,10 @@ def edit_quiz_single( quiz ):
 		elif options[ option ] == "Undo Changes":
 			undo_changes( quiz, undo_data )
 			is_editing = False
+		elif options[ option ] == delete_quiz_text:
+			delete_quiz( quiz )
+			is_editing = False
+
 
 def edit_quiz_name( quiz ):
 	print( f"{ansi.Fore.YELLOW2}Edit Name:{ansi.Fore.RESET} {quiz.name}" )
@@ -132,9 +138,12 @@ def create_new_question( quiz ):
 	if question != None:
 		quiz.questions.append( question )
 
-
 def save_changes( quiz ):
 	quiz.save()
 
 def undo_changes( quiz, data ):
 	quiz.load( data )
+
+def delete_quiz( quiz ):
+	quiz.delete()
+	quizzes.remove( quiz )
