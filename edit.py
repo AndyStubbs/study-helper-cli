@@ -58,7 +58,9 @@ def edit_quiz_single( quiz ):
 
 def edit_quiz_name( quiz ):
 	print( f"{ansi.Fore.YELLOW2}Edit Name:{ansi.Fore.RESET} {quiz.name}" )
-	quiz.name = util.get_text( "Enter new name: ", "Name cannot be blank" )
+	name = util.get_text( "Enter new name (blank to cancel): " )
+	if name != "":
+		quiz.name = name
 
 def edit_quiz_description( quiz ):
 	print( f"{ansi.Fore.YELLOW2}Edit Description:{ansi.Fore.RESET} {quiz.description}" )
@@ -80,11 +82,12 @@ def edit_questions( quiz ):
 		create_new_question( quiz )
 		return
 	if question_index >= len( quiz.questions ):
+		print("Go Back")
 		return
 	question = quiz.questions[ question_index ]
 	print( f"{ansi.Fore.YELLOW2}Edit Question: {ansi.Fore.RESET} {question.text}" )
 	options = [
-		"Edit text",
+		"Edit question text",
 		"Edit answers",
 		"Edit correct answer",
 		"Edit concepts",

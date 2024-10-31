@@ -1,32 +1,28 @@
 {
 	"filename": "quiz-0002.json",
-	"name": "Test 2",
+	"name": "Python",
 	"topic": "",
 	"description": "",
 	"questions": [
 		{
-			"text": "What is it?",
+			"text": "Which is the correct way to display \"Hello World\" on the console window?",
 			"answers": [
-				"A",
-				"2",
-				"3",
-				"4"
+				"printf(\"Hello World\")",
+				"print(\"Hello World\")",
+				"console.log(\"Hello World\")",
+				"fmt.Println(\"Hello World\")"
 			],
-			"correct_answer": 0,
+			"correct_answer": 1,
 			"concepts": []
 		},
 		{
-			"text": "What is that?",
+			"text": "Does Python support class inheritance?",
 			"answers": [
-				"this",
-				"me",
-				"that",
-				"cat"
+				"Yes",
+				"No"
 			],
-			"correct_answer": 2,
-			"concepts": [
-				"Not good"
-			]
+			"correct_answer": 0,
+			"concepts": []
 		}
 	]
 }

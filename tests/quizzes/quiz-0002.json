@@ -1,5 +1,7 @@
 {
+	"filename": "quiz-0002.json",
 	"name": "Quiz With Data",
+	"topic": "Topic",
 	"description": "Test Description",
 	"questions": [
 		{
@@ -42,7 +44,5 @@
 				"Minus"
 			]
 		}
-	],
-	"topic": "Topic",
-	"filename": "quiz-0002.json"
+	]
 }
