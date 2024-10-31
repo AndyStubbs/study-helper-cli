@@ -46,11 +46,12 @@ Linux:
 - **quizzes.py:** Manages the state of the quizzes to allow persistence.
 - **quiz.py:** Handles saving and loading the quiz and the quiz data.
 - **ansi.py:** Handles support for ANSI colors in the terminal.
+- **util.py:** A utility file with static functions to help with input and output.
 
 ## Unit Tests
 
-- **test.py** Launches the unit tests.
-- **tests/test_quiz.py** Unit tests for quiz data types and saving and loading quizes.
+- **test.py:** Launches the unit tests.
+- **tests/test_quiz.py:** Unit tests for quiz data types and saving and loading quizes.
 
 ## Unit Test Usage
 
