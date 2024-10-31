@@ -49,7 +49,8 @@ Linux:
 
 ## Unit Tests
 
-Unit tests for quiz data types and saving and loading quizes.
+- **test.py** Launches the unit tests.
+- **tests/test_quiz.py** Unit tests for quiz data types and saving and loading quizes.
 
 ## Unit Test Usage
 
